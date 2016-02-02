@@ -8,7 +8,6 @@ class MyClass():
         self.matrix_w = [[]]
         self.length = 0
         self.sum = 0
-        self.number = None
         self.d = {"Phe": ["UUA", "UUC", "UUG", "UUU"], "Leu": ["CUA", "CUC", "CUG", "CUU"],
                   "Ile": ["AUA", "AUC", "AUU"],
                   "Met": ["AUG"], "Val": ["GUA", "GUC", "GUG", "GUU"],
