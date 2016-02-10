@@ -179,7 +179,7 @@ class Main {
     s = ""
     a._matrix_v(optimal_structure)
     var optimal_energy = a.sum
-    for (k <- 1 to a.length - 1) {
+    for (k <- 1 to number) {
       var this_structure = ""
       for (i <- 0 to a.length - 1) {
         if (i % 3 != 0) {
