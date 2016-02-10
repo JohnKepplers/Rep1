@@ -23,7 +23,7 @@ class Main {
     if (((x == 'A') && (y == 'U')) || ((x == 'U') && (y == 'A')) || ((x == 'G') && (y == 'C')) || ((x == 'C') && (y == 'G'))) true else false
 
 
-  def _matrix_v(f: java.lang.String => Unit, str: java.lang.String) = {
+  def _matrix_v(str: java.lang.String) = {
     val a = new Main()
     a.length = str.length()
     var helping_list = ArrayBuffer[Double]()
@@ -161,28 +161,50 @@ class Main {
     }
   }
 
-  def count(str: java.lang.String, number: Integer) = {
+  def count(str: java.lang.String, number: Integer): Double = {
     val a = new Main()
-    var optimal_structure = ""
+    var optimal_structure: java.lang.String = ""
+    var s: java.lang.String = ""
     for (i <- 0 to a.length - 1) {
-      if (i % 3 == 0) {
-        if (i + 2 < a.length) {
-          var s = ""
-          for (z <- i to i + 2) {
-            s += str(i)
-          }
-          optimal_structure += a.d.get(s)
-        }
+      if (i % 3 != 0) {
+        s += str(i)
+      }
+      else if (i % 3 == 0) {
+        s += str(i)
+        val t: Array[java.lang.String] = a.d(s)
+        optimal_structure += t(0)
+        s = ""
       }
     }
+    s = ""
+    a._matrix_v(optimal_structure)
     var optimal_energy = a.sum
     for (k <- 1 to a.length - 1) {
-      var this_structure =
-        for (i <- 0 to a.length - 1) {
-          if (i % 3 == 0) {
-
-          }
+      var this_structure = ""
+      for (i <- 0 to a.length - 1) {
+        if (i % 3 != 0) {
+          s += str(i)
         }
+        else if (i % 3 == 0) {
+          s += str(i)
+          val t: Array[java.lang.String] = a.d(s)
+          val j = t.length - 1 //Здесь можно выбирать случайное число из отрезка [0, length - 1]
+          this_structure += t(j)
+          s = ""
+        }
+      }
+      a._matrix_v(this_structure)
+      if (a.sum < optimal_energy) {
+        optimal_energy = a.sum
+        optimal_structure = this_structure
+      }
     }
+    print(optimal_structure)
+    optimal_energy
+  }
+
+  def main(args: Array[java.lang.String]): Unit = {
+    val k = new Main()
+    print(k.count("ProGlu", 20))
   }
 }
