@@ -156,7 +156,7 @@ object Main extends App {
     local_minimum
   }
 
-  def monte_carlo(str: String, number: Integer): Double = {
+  def monte_carlo(str: String, number: Integer): Integer = {
     var optimal_structure: String = ""
     var optimal_energy: Double = 0
     var s = ArrayBuffer[Char]()
@@ -164,22 +164,40 @@ object Main extends App {
     for (i <- 0 to length - 1) {
       if ((i + 1) % 3 != 0) {
         s += str(i)
-        print(s)
       }
       else if ((i + 1) % 3 == 0) {
         s += str(i)
-        print(s)
         optimal_structure += d(s)(0)
         s = ArrayBuffer[Char]()
       }
     }
     _matrix_v(optimal_structure)
     optimal_energy = sum
-
-
+    for (i <- 2 to number) {
+      var this_structure: String = ""
+      var this_s = ArrayBuffer[Char]()
+      for (j <- 0 to length - 1) {
+        if ((j + 1) % 3 != 0) {
+          this_s += str(j)
+        }
+        else if ((j + 1) % 3 == 0) {
+          this_s += str(j)
+          var rand = new Random()
+          var r = rand.nextInt(d(this_s).length)
+          this_structure += d(this_s)(0)
+          this_s = ArrayBuffer[Char]()
+        }
+        _matrix_v(this_structure)
+        if (sum < optimal_energy) {
+          optimal_structure = this_structure
+          optimal_energy = sum
+        }
+      }
+    }
     print(optimal_structure, optimal_energy)
-    4.6
+    1
   }
+
 
 
   monte_carlo("PheSerProProAlaUrpUrpCysPhe", 20)
