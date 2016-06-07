@@ -184,7 +184,7 @@ object Main extends App {
           this_s += str(j)
           var rand = new Random()
           var r = rand.nextInt(d(this_s).length)
-          this_structure += d(this_s)(0)
+          this_structure += d(this_s)(r)
           this_s = ArrayBuffer[Char]()
         }
         _matrix_v(this_structure)
