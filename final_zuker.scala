@@ -45,7 +45,7 @@ object Main extends App {
           var my_list = ArrayBuffer[Double]()
           my_list += eh(i, j, str)
           my_list += es(i, j, str) + matrix_v(i + 1)(j - 1)
-          my_list += VBI(i, j)
+          my_list += VBI(i, j, str)
           var local_minimum = my_list(0)
           for (k <- 1 to 2) {
             if (local_minimum > my_list(k)) local_minimum = my_list(k)
@@ -149,6 +149,10 @@ object Main extends App {
     if ((is_complement(str(i + 1), str(j - 1))) && (is_hairpin_loop(i + 1, j - 1, str))) true else false
   }
 
+  def is_interior_loop(i1: Integer, j1: Integer, i2: Integer, j2: Integer, str: String): Boolean = {
+    if ((i2 != i1 + 1) && (j2 != j1 - 1) && (is_complement(str(i2), str(j2)))) true else false
+  }
+
 
   def eh(i: Integer, j: Integer, str: String): Double = {
     // (i, j) All unpaired bases between i & j, if there is no paired bases between i & j
@@ -171,36 +175,49 @@ object Main extends App {
     // T = 310K
     if (!is_stacking_loop(i, j, str)) infinity
     else {
-      if ((i == 'A') && (j == 'U') && (i+1 == 'A') && (j-1 == 'U')) matrix_of_stacked_pairs(0)(0)
-      if ((i == 'A') && (j == 'U') && (i+1 == 'C') && (j-1 == 'G')) matrix_of_stacked_pairs(0)(1)
-      if ((i == 'A') && (j == 'U') && (i+1 == 'G') && (j-1 == 'C')) matrix_of_stacked_pairs(0)(2)
-      if ((i == 'A') && (j == 'U') && (i+1 == 'U') && (j-1 == 'A')) matrix_of_stacked_pairs(0)(3)
-      if ((i == 'C') && (j == 'G') && (i+1 == 'A') && (j-1 == 'U')) matrix_of_stacked_pairs(1)(0)
-      if ((i == 'C') && (j == 'G') && (i+1 == 'C') && (j-1 == 'G')) matrix_of_stacked_pairs(1)(1)
-      if ((i == 'C') && (j == 'G') && (i+1 == 'G') && (j-1 == 'C')) matrix_of_stacked_pairs(1)(2)
-      if ((i == 'C') && (j == 'G') && (i+1 == 'U') && (j-1 == 'A')) matrix_of_stacked_pairs(1)(3)
-      if ((i == 'G') && (j == 'C') && (i+1 == 'A') && (j-1 == 'U')) matrix_of_stacked_pairs(2)(0)
-      if ((i == 'G') && (j == 'C') && (i+1 == 'C') && (j-1 == 'G')) matrix_of_stacked_pairs(2)(1)
-      if ((i == 'G') && (j == 'C') && (i+1 == 'G') && (j-1 == 'C')) matrix_of_stacked_pairs(2)(2)
-      if ((i == 'G') && (j == 'C') && (i+1 == 'U') && (j-1 == 'A')) matrix_of_stacked_pairs(2)(3)
-      if ((i == 'U') && (j == 'A') && (i+1 == 'A') && (j-1 == 'U')) matrix_of_stacked_pairs(3)(0)
-      if ((i == 'U') && (j == 'A') && (i+1 == 'C') && (j-1 == 'G')) matrix_of_stacked_pairs(3)(1)
-      if ((i == 'U') && (j == 'A') && (i+1 == 'G') && (j-1 == 'C')) matrix_of_stacked_pairs(3)(2)
-      if ((i == 'U') && (j == 'A') && (i+1 == 'U') && (j-1 == 'A')) matrix_of_stacked_pairs(3)(3)
+      if ((i == 'A') && (j == 'U') && (i + 1 == 'A') && (j - 1 == 'U')) matrix_of_stacked_pairs(0)(0)
+      if ((i == 'A') && (j == 'U') && (i + 1 == 'C') && (j - 1 == 'G')) matrix_of_stacked_pairs(0)(1)
+      if ((i == 'A') && (j == 'U') && (i + 1 == 'G') && (j - 1 == 'C')) matrix_of_stacked_pairs(0)(2)
+      if ((i == 'A') && (j == 'U') && (i + 1 == 'U') && (j - 1 == 'A')) matrix_of_stacked_pairs(0)(3)
+      if ((i == 'C') && (j == 'G') && (i + 1 == 'A') && (j - 1 == 'U')) matrix_of_stacked_pairs(1)(0)
+      if ((i == 'C') && (j == 'G') && (i + 1 == 'C') && (j - 1 == 'G')) matrix_of_stacked_pairs(1)(1)
+      if ((i == 'C') && (j == 'G') && (i + 1 == 'G') && (j - 1 == 'C')) matrix_of_stacked_pairs(1)(2)
+      if ((i == 'C') && (j == 'G') && (i + 1 == 'U') && (j - 1 == 'A')) matrix_of_stacked_pairs(1)(3)
+      if ((i == 'G') && (j == 'C') && (i + 1 == 'A') && (j - 1 == 'U')) matrix_of_stacked_pairs(2)(0)
+      if ((i == 'G') && (j == 'C') && (i + 1 == 'C') && (j - 1 == 'G')) matrix_of_stacked_pairs(2)(1)
+      if ((i == 'G') && (j == 'C') && (i + 1 == 'G') && (j - 1 == 'C')) matrix_of_stacked_pairs(2)(2)
+      if ((i == 'G') && (j == 'C') && (i + 1 == 'U') && (j - 1 == 'A')) matrix_of_stacked_pairs(2)(3)
+      if ((i == 'U') && (j == 'A') && (i + 1 == 'A') && (j - 1 == 'U')) matrix_of_stacked_pairs(3)(0)
+      if ((i == 'U') && (j == 'A') && (i + 1 == 'C') && (j - 1 == 'G')) matrix_of_stacked_pairs(3)(1)
+      if ((i == 'U') && (j == 'A') && (i + 1 == 'G') && (j - 1 == 'C')) matrix_of_stacked_pairs(3)(2)
+      if ((i == 'U') && (j == 'A') && (i + 1 == 'U') && (j - 1 == 'A')) matrix_of_stacked_pairs(3)(3)
       else infinity
     }
   }
 
-  def ebi(i: Integer, j: Integer, a: Integer, b: Integer): Double = {
-    4
+  def ebi(i: Integer, j: Integer, a: Integer, b: Integer, str: String): Double = {
+    if (!is_interior_loop(i, j, a, b, str)) infinity
+    else {
+      val length_of_loop = Math.abs(str(j) - str(i)) - 1
+      if (length_of_loop == 2) 4.1
+      else if (length_of_loop == 3) 5.1
+      else if (length_of_loop == 4) 4.9
+      else if (length_of_loop == 5) 5.3
+      else if ((length_of_loop >= 5) && (length_of_loop < 10)) 6.3
+      else if ((length_of_loop >= 10) && (length_of_loop < 15)) 6.7
+      else if ((length_of_loop >= 15) && (length_of_loop < 20)) 7.0
+      else if ((length_of_loop >= 20) && (length_of_loop < 25)) 7.2
+      else if ((length_of_loop >= 25) && (length_of_loop < 31)) 7.4
+      else infinity
+    }
   }
 
-  def VBI(i: Integer, j: Integer): Double = {
+  def VBI(i: Integer, j: Integer, str: String): Double = {
     var local_minimum: Double = infinity
     for (a <- i + 1 to j - 2) {
       for (b <- i + 2 to j - 1) {
         if ((a < b) && (a - i + j - b > 2)) {
-          val d = ebi(i, j, a, b) + matrix_v(a)(b)
+          val d = ebi(i, j, a, b, str) + matrix_v(a)(b)
           if (local_minimum > d) local_minimum = d
         }
       }
